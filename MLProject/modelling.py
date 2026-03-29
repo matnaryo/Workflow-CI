@@ -6,10 +6,10 @@ import random
 import numpy as np
 import os
 
-mlflow.set_tracking_uri("http://127.0.0.1:5000/")
+#mlflow.set_tracking_uri("http://127.0.0.1:5000/")
 
 # Create a new MLflow Experiment
-mlflow.set_experiment("Loan Default")
+#mlflow.set_experiment("Loan Default")
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 MODEL_DIR = os.path.join(BASE_DIR, "")
