@@ -31,13 +31,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install --upgrade google-auth google-auth-httplib2 -r MLProject/requirements.txt
 
-      - name: Install gdown
-        run: pip install gdown
-
-      - name: Download dataset
-        run: |
-          gdown 1b3Zz7KHGnPh836hYdhN4s03gc63Y77F_ -O train_processed.csv
-
       - name: Setup MLflow Experiment
         run: |
           # Step ini khusus untuk membuat struktur folder mlruns dan mendaftarkan experiment
@@ -51,7 +44,7 @@ jobs:
       - name: Run mlflow project
         run: |
           # Passing nama experiment ke dalam mlflow run
-          mlflow run MLProject/MLproject --env-manager=local --experiment-name ${{ env.EXPERIMENT_NAME }}
+          mlflow run MLProject --env-manager=local --experiment-name ${{ env.EXPERIMENT_NAME }}
 
       - name: Get latest MLflow run_id
         run: |
