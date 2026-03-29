@@ -12,7 +12,7 @@ on:
 env:
   # Menggunakan path absolut untuk tracking URI
   MLFLOW_TRACKING_URI: "file://${{ github.workspace }}/mlruns"
-  EXPERIMENT_NAME: "Loan Default"
+  EXPERIMENT_NAME: "Loan-Default"
 
 jobs:
   build:
