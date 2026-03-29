@@ -63,6 +63,16 @@ jobs:
           echo "RUN_ID=$RUN_ID" >> $GITHUB_ENV
           echo "Latest run_id: $RUN_ID"
 
+          # Upload artifact ke direktori Gdrive dengan OAuth2
+          - name: Upload to Google Drive
+            env:
+              GDRIVE_REFRESH_TOKEN: ${{ secrets.GDRIVE_REFRESH_TOKEN }}
+              GDRIVE_CLIENT_ID: ${{ secrets.GDRIVE_CLIENT_ID }}
+              GDRIVE_CLIENT_SECRET: ${{ secrets.GDRIVE_CLIENT_SECRET }}
+              GDRIVE_FOLDER_ID: ${{ secrets.GDRIVE_FOLDER_ID }}
+            run: |
+              python MLProject/upload_to_gdrive.py
+
       # Build Docker Model
       - name: Build Docker Model
         run: |
@@ -84,12 +94,3 @@ jobs:
       - name: Push Docker Image
         run: |
           docker push ${{ secrets.DOCKER_HUB_USERNAME }}/workflow-ci:latest
-      # Upload artifact ke direktori Gdrive dengan OAuth2
-      - name: Upload to Google Drive
-        env:
-          GDRIVE_REFRESH_TOKEN: ${{ secrets.GDRIVE_REFRESH_TOKEN }}
-          GDRIVE_CLIENT_ID: ${{ secrets.GDRIVE_CLIENT_ID }}
-          GDRIVE_CLIENT_SECRET: ${{ secrets.GDRIVE_CLIENT_SECRET }}
-          GDRIVE_FOLDER_ID: ${{ secrets.GDRIVE_FOLDER_ID }}
-        run: |
-          python MLProject/upload_to_gdrive.py
