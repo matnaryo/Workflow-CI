@@ -16,7 +16,7 @@ def upload_file(service, file_path, folder_id):
     print(f"Uploaded file: {file_name}")
 
 
-def upload_model(service, local_folder, root_folder_id):
+def upload_mlruns(service, local_folder, root_folder_id):
     for root, dirs, files in os.walk(local_folder):
         # Tentukan path relatif
         relative_path = os.path.relpath(root, local_folder)
