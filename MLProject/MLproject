@@ -1,0 +1,11 @@
+name: workflow-ci
+
+conda_env: conda.yaml
+
+entry_points:
+  main:
+    parameters:
+      n_estimators: { type: int, default: 150 }
+      max_depth: { type: int, default: 15 }
+      dataset: { type: string, default: "train_processed.csv" }
+    command: "python modelling.py {n_estimators} {max_depth} {dataset}"

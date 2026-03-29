@@ -1,0 +1,51 @@
+# uploader.py
+import os
+from googleapiclient.http import MediaFileUpload
+from .drive import create_folder
+
+
+def upload_file(service, file_path, folder_id):
+    file_name = os.path.basename(file_path)
+
+    file_metadata = {"name": file_name, "parents": [folder_id]}
+
+    media = MediaFileUpload(file_path, resumable=True)
+
+    service.files().create(body=file_metadata, media_body=media, fields="id").execute()
+
+    print(f"Uploaded file: {file_name}")
+
+
+def upload_model(service, local_folder, root_folder_id):
+    for root, dirs, files in os.walk(local_folder):
+        # Tentukan path relatif
+        relative_path = os.path.relpath(root, local_folder)
+        current_parent_id = root_folder_id
+
+        if relative_path != ".":
+            for part in relative_path.split(os.sep):
+                current_parent_id = create_folder(service, part, current_parent_id)
+
+        # Buat folder di Drive meski kosong
+        if not files and not dirs:
+            create_folder(service, os.path.basename(root), current_parent_id)
+
+        # Upload semua file dalam folder ini
+        for file in files:
+            file_path = os.path.join(root, file)
+
+            file_metadata = {
+                "name": file,
+                "parents": [current_parent_id],
+            }
+
+            media = MediaFileUpload(file_path, resumable=False)
+
+            service.files().create(
+                body=file_metadata,
+                media_body=media,
+                fields="id",
+                supportsAllDrives=True,
+            ).execute()
+
+            print("Uploaded:", file_path)
