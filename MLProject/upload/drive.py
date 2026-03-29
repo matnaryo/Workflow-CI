@@ -1,21 +1,11 @@
-# drive.py
 from googleapiclient.discovery import build
-import py_compile
-from datetime import datetime
-import zoneinfo
 
 
 def get_drive_service(credentials):
     return build("drive", "v3", credentials=credentials)
 
 
-def generate_folder_name():
-    return datetime.now(zoneinfo.ZoneInfo("Asia/Jakarta")).strftime(
-        "run_%Y-%m-%d_%H-%M-%S"
-    )
-
-
-def create_folder(service, name, parent_id):
+def get_or_create_folder(service, name, parent_id):
     query = (
         f"name='{name}' and "
         f"'{parent_id}' in parents and "
