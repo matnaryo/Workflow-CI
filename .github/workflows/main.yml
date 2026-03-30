@@ -49,6 +49,16 @@ jobs:
           # Passing nama experiment ke dalam mlflow run
           mlflow run MLProject --env-manager=local --experiment-name ${{ env.EXPERIMENT_NAME }}
 
+      # Upload artifact ke direktori Gdrive dengan OAuth2
+      - name: Upload to Google Drive
+        env:
+          GDRIVE_REFRESH_TOKEN: ${{ secrets.GDRIVE_REFRESH_TOKEN }}
+          GDRIVE_CLIENT_ID: ${{ secrets.GDRIVE_CLIENT_ID }}
+          GDRIVE_CLIENT_SECRET: ${{ secrets.GDRIVE_CLIENT_SECRET }}
+          GDRIVE_FOLDER_ID: ${{ secrets.GDRIVE_FOLDER_ID }}
+        run: |
+          python MLProject/upload_to_gdrive.py
+
       - name: Get latest MLflow run_id
         run: |
           # Mengambil Run ID terakhir dari experiment yang spesifik
@@ -62,16 +72,6 @@ jobs:
 
           echo "RUN_ID=$RUN_ID" >> $GITHUB_ENV
           echo "Latest run_id: $RUN_ID"
-
-      # Upload artifact ke direktori Gdrive dengan OAuth2
-      - name: Upload to Google Drive
-        env:
-          GDRIVE_REFRESH_TOKEN: ${{ secrets.GDRIVE_REFRESH_TOKEN }}
-          GDRIVE_CLIENT_ID: ${{ secrets.GDRIVE_CLIENT_ID }}
-          GDRIVE_CLIENT_SECRET: ${{ secrets.GDRIVE_CLIENT_SECRET }}
-          GDRIVE_FOLDER_ID: ${{ secrets.GDRIVE_FOLDER_ID }}
-        run: |
-          python MLProject/upload_to_gdrive.py
 
       # Build Docker Model
       - name: Build Docker Model
